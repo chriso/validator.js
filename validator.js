@@ -308,6 +308,10 @@ decimal['pl-Pl'] = decimal['pl-PL']; // see #1455
 
 alpha['fa-AF'] = alpha.fa;
 
+function hasOption(options, optionName) {
+  return options[optionName] !== null && typeof options[optionName] !== 'undefined';
+}
+
 function isFloat(str, options) {
   assertString(str);
   options = options || {};
@@ -319,7 +323,7 @@ function isFloat(str, options) {
   }
 
   var value = parseFloat(str.replace(',', '.'));
-  return _float.test(str) && (!options.hasOwnProperty('min') || value >= options.min) && (!options.hasOwnProperty('max') || value <= options.max) && (!options.hasOwnProperty('lt') || value < options.lt) && (!options.hasOwnProperty('gt') || value > options.gt);
+  return _float.test(str) && (!hasOption(options, 'min') || value >= options.min) && (!hasOption(options, 'max') || value <= options.max) && (!hasOption(options, 'lt') || value < options.lt) && (!hasOption(options, 'gt') || value > options.gt);
 }
 var locales = Object.keys(decimal);
 
@@ -1224,12 +1228,12 @@ function isInt(str, options) {
   options = options || {}; // Get the regex to use for testing, based on whether
   // leading zeroes are allowed or not.
 
-  var regex = options.hasOwnProperty('allow_leading_zeroes') && !options.allow_leading_zeroes ? _int : intLeadingZeroes; // Check min/max/lt/gt
+  var regex = hasOption(options, 'allow_leading_zeroes') && !options.allow_leading_zeroes ? _int : intLeadingZeroes; // Check min/max/lt/gt
 
-  var minCheckPassed = !options.hasOwnProperty('min') || str >= options.min;
-  var maxCheckPassed = !options.hasOwnProperty('max') || str <= options.max;
-  var ltCheckPassed = !options.hasOwnProperty('lt') || str < options.lt;
-  var gtCheckPassed = !options.hasOwnProperty('gt') || str > options.gt;
+  var minCheckPassed = !hasOption(options, 'min') || str >= options.min;
+  var maxCheckPassed = !hasOption(options, 'max') || str <= options.max;
+  var ltCheckPassed = !hasOption(options, 'lt') || str < options.lt;
+  var gtCheckPassed = !hasOption(options, 'gt') || str > options.gt;
   return regex.test(str) && minCheckPassed && maxCheckPassed && ltCheckPassed && gtCheckPassed;
 }
 
