@@ -1089,6 +1089,38 @@ describe('Validators', () => {
     });
   });
 
+  it('should validate alpha string on multiple locales', () => {
+    test({
+      validator: 'isAlpha',
+      args: [['en-US', 'da-DK', 'invalid', 'sk-SK']],
+      valid: [
+        'Ærevalid',
+        'mäØrekčeň',
+      ],
+      invalid: [
+        '你好世界',
+        '1. this is not a valid alpha string',
+        'this is also not a valid alpha string.',
+      ],
+    });
+
+    test({
+      validator: 'isAlpha',
+      args: ['pt-PT', 'sv-SE'],
+      valid: [
+        'qwértyúão',
+        'religiös',
+        'stjäla',
+      ],
+      invalid: [
+        'Heiß',
+        '١٢٣أبت',
+        '١٢٣',
+        'abc1',
+      ],
+    });
+  });
+
   it('should validate alpha string with ignored characters', () => {
     test({
       validator: 'isAlpha',
